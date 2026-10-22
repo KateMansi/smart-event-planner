@@ -18,6 +18,7 @@
       urgent: 'Urgent', standard: 'Standard',
       errGeneric: 'Something went wrong. Please try again.',
       errNetwork: 'Could not reach the server. Check your connection.',
+      errRate: 'Too many requests. Please wait a minute and try again.',
       errValidation: 'Please correct these fields:'
     },
     hi: {
@@ -36,6 +37,7 @@
       urgent: 'तुरंत', standard: 'सामान्य',
       errGeneric: 'कुछ गड़बड़ हो गई। कृपया फिर प्रयास करें।',
       errNetwork: 'सर्वर से संपर्क नहीं हो सका। अपना कनेक्शन जांचें।',
+      errRate: 'बहुत अधिक अनुरोध। कृपया एक मिनट रुककर फिर प्रयास करें।',
       errValidation: 'कृपया इन फ़ील्ड को सुधारें:'
     },
     mr: {
@@ -54,6 +56,7 @@
       urgent: 'तातडीचा', standard: 'सामान्य',
       errGeneric: 'काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.',
       errNetwork: 'सर्व्हरशी संपर्क होऊ शकला नाही. तुमचे कनेक्शन तपासा.',
+      errRate: 'खूप जास्त विनंत्या. कृपया एक मिनिट थांबून पुन्हा प्रयत्न करा.',
       errValidation: 'कृपया ही फील्ड दुरुस्त करा:'
     }
   };
@@ -167,6 +170,11 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(buildPayload())
       });
+        if (response.status === 429) {
+        showError(t().errRate);
+        status.textContent = '';
+        return;
+      }
 
       if (response.status === 400) {
         const data = await response.json().catch(() => ({}));
